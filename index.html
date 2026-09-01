@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -7,138 +7,278 @@
 
 <style>
 *{box-sizing:border-box}
+
 body{
- margin:0;
- background:#050607;
- color:white;
- font-family:Arial,sans-serif
+margin:0;
+background:#050607;
+color:white;
+font-family:Arial,sans-serif
 }
+
 header{
- padding:18px 6%;
- border-bottom:1px solid #222;
- display:flex;
- justify-content:space-between;
- align-items:center
+padding:18px 6%;
+border-bottom:1px solid #222;
+display:flex;
+justify-content:space-between;
+align-items:center;
+position:sticky;
+top:0;
+background:#050607;
+z-index:20
 }
+
 .logo{
- font-size:25px;
- font-weight:900;
- line-height:.8
+font-size:24px;
+font-weight:900;
+line-height:.8
 }
+
 .logo span{display:block}
+
 button{
- cursor:pointer;
- border-radius:9px;
- padding:11px 16px;
- font-weight:bold
+cursor:pointer;
+border-radius:9px;
+padding:11px 16px;
+font-weight:bold
 }
-.menu{
- background:#15191a;
- color:white;
- border:1px solid #333
-}
+
 .green{
- background:#8cff00;
- color:#000;
- border:0
+background:#8cff00;
+color:#000;
+border:0
 }
+
+.menu{
+background:#15191a;
+color:white;
+border:1px solid #333
+}
+
 main{
- max-width:1100px;
- margin:auto;
- padding:45px 6%
+max-width:1100px;
+margin:auto;
+padding:45px 6%
 }
-.hero{padding:30px 0}
+
+.hero{
+padding:30px 0 45px
+}
+
 .small{
- color:#8cff00;
- font-size:12px;
- font-weight:bold;
- letter-spacing:2px
+color:#8cff00;
+font-size:12px;
+font-weight:bold;
+letter-spacing:2px
 }
+
 h1{
- font-size:clamp(42px,8vw,75px);
- line-height:.95;
- letter-spacing:-4px;
- margin:12px 0
+font-size:clamp(42px,8vw,75px);
+line-height:.95;
+letter-spacing:-4px;
+margin:12px 0
 }
+
 h1 span{color:#8cff00}
-p{color:#aaa;font-size:17px}
+
+p{
+color:#aaa;
+font-size:16px
+}
+
 .search{
- display:flex;
- max-width:700px;
- margin-top:25px
+display:flex;
+max-width:700px;
+margin-top:25px
 }
+
 .search input{
- flex:1;
- padding:16px;
- background:#15191a;
- border:1px solid #444;
- color:white;
- border-radius:10px 0 0 10px;
- font-size:16px
+flex:1;
+padding:16px;
+background:#15191a;
+border:1px solid #444;
+color:white;
+border-radius:10px 0 0 10px;
+font-size:16px
 }
-.search button{border-radius:0 10px 10px 0}
+
+.search button{
+border-radius:0 10px 10px 0
+}
+
 .cards{
- display:grid;
- grid-template-columns:repeat(3,1fr);
- gap:16px
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:16px
 }
+
 .card{
- background:#111516;
- border:1px solid #292f31;
- border-radius:14px;
- overflow:hidden
+background:#111516;
+border:1px solid #292f31;
+border-radius:14px;
+overflow:hidden
 }
+
 .cover{
- height:170px;
- display:grid;
- place-items:center;
- font-size:50px;
- background:linear-gradient(135deg,#354043,#101313)
+height:190px;
+background-size:cover;
+background-position:center
 }
-.cardbody{padding:17px}
+
+.cardbody{
+padding:17px
+}
+
 .tag{
- color:#8cff00;
- font-size:11px;
- font-weight:bold
+color:#8cff00;
+font-size:11px;
+font-weight:bold
 }
-.card h3{margin:8px 0}
+
+.card h3{
+margin:8px 0
+}
+
 .full{
- width:100%;
- margin-top:14px;
- background:#202526;
- color:white;
- border:1px solid #343b3d
+width:100%;
+margin-top:14px;
+background:#202526;
+color:white;
+border:1px solid #343b3d
 }
+
 .gallery{
- display:none
+display:none
 }
+
 .photos{
- display:grid;
- grid-template-columns:repeat(4,1fr);
- gap:8px
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:10px
 }
+
 .photo{
- aspect-ratio:1;
- background:linear-gradient(135deg,#354043,#101313);
- border-radius:9px;
- display:grid;
- place-items:center;
- font-size:35px;
- position:relative
+aspect-ratio:1;
+background-size:cover;
+background-position:center;
+border-radius:9px;
+position:relative;
+cursor:pointer;
+border:3px solid transparent
 }
-.watermark{
- position:absolute;
- bottom:8px;
- left:8px;
- font-size:10px;
- font-weight:bold
+
+.photo.selected{
+border-color:#8cff00
 }
-.back{
- margin-bottom:25px
+
+.check{
+position:absolute;
+top:8px;
+right:8px;
+background:#8cff00;
+color:#000;
+border-radius:50%;
+width:25px;
+height:25px;
+display:none;
+place-items:center;
+font-weight:bold
 }
+
+.photo.selected .check{
+display:grid
+}
+
+.cart{
+position:fixed;
+bottom:20px;
+right:20px;
+background:#111516;
+border:1px solid #8cff00;
+padding:15px 18px;
+border-radius:12px;
+z-index:30;
+display:none
+}
+
+.admin{
+display:none
+}
+
+.adminbox{
+background:#101415;
+border:1px solid #303637;
+border-radius:15px;
+padding:25px;
+margin-bottom:25px
+}
+
+.form{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px
+}
+
+.form input,
+.form select{
+width:100%;
+padding:13px;
+border-radius:8px;
+border:1px solid #444;
+background:#191d1e;
+color:white
+}
+
+.admin-list{
+display:grid;
+gap:12px
+}
+
+.admin-item{
+background:#171b1c;
+border:1px solid #303637;
+padding:15px;
+border-radius:10px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px
+}
+
+.actions{
+display:flex;
+gap:7px;
+flex-wrap:wrap
+}
+
+.hidden{
+opacity:.45
+}
+
 @media(max-width:700px){
- .cards{grid-template-columns:1fr}
- .photos{grid-template-columns:repeat(2,1fr)}
+
+.cards{
+grid-template-columns:1fr
+}
+
+.photos{
+grid-template-columns:repeat(2,1fr)
+}
+
+.form{
+grid-template-columns:1fr
+}
+
+.admin-item{
+display:block
+}
+
+.actions{
+margin-top:12px
+}
+
+h1{
+letter-spacing:-2px
+}
 }
 </style>
 </head>
@@ -146,14 +286,16 @@ p{color:#aaa;font-size:17px}
 <body>
 
 <header>
+
 <div class="logo">
 <span>planeta</span>
 <span>deporte</span>
 </div>
 
-<button class="menu" onclick="alert('Panel de fotógrafos próximamente')">
-Panel fotógrafos
-</button>
+<div>
+<button class="menu" onclick="abrirAdmin()">Panel administración</button>
+</div>
+
 </header>
 
 <main id="home">
@@ -180,150 +322,519 @@ Buscá tu partido, elegí tus fotos y llevate tus mejores momentos.
 
 <h2>Partidos disponibles</h2>
 
-<div class="cards" id="partidos">
-
-<div class="card">
-<div class="cover">⚽</div>
-
-<div class="cardbody">
-<div class="tag">FÚTBOL</div>
-
-<h3>Lobos Athletic vs. Atlético Lobos</h3>
-
-<p>
-30/08/2026 · Liga Lobos
-</p>
-
-<button class="full" onclick="abrirGaleria()">
-VER GALERÍA
-</button>
-</div>
-</div>
-
-
-<div class="card">
-<div class="cover">⚽</div>
-
-<div class="cardbody">
-<div class="tag">FÚTBOL</div>
-
-<h3>Independiente vs. Deportivo X</h3>
-
-<p>
-29/08/2026 · Torneo Apertura
-</p>
-
-<button class="full" onclick="abrirGaleria()">
-VER GALERÍA
-</button>
-</div>
-</div>
-
-
-<div class="card">
-<div class="cover">🎾</div>
-
-<div class="cardbody">
-<div class="tag">PÁDEL</div>
-
-<h3>Open Planeta Deporte</h3>
-
-<p>
-29/08/2026 · Torneo Pádel
-</p>
-
-<button class="full" onclick="abrirGaleria()">
-VER GALERÍA
-</button>
-</div>
-</div>
-
-</div>
+<div class="cards" id="partidos"></div>
 
 </main>
 
 
 <main id="galeria" class="gallery">
 
-<button class="menu back" onclick="volver()">
-← Volver
-</button>
+<button class="menu" onclick="volver()">← Volver</button>
 
-<div class="small">FÚTBOL</div>
+<div style="margin-top:30px">
+
+<div class="small" id="galeriaDeporte"></div>
+
+<h1 id="galeriaTitulo"></h1>
+
+<p id="galeriaInfo"></p>
+
+</div>
+
+<div class="photos" id="fotos"></div>
+
+</main>
+
+
+<main id="admin" class="admin">
+
+<button class="menu" onclick="cerrarAdmin()">← Volver a la página</button>
+
+<div style="margin-top:30px">
+
+<div class="small">ADMINISTRACIÓN</div>
 
 <h1>
-Lobos Athletic<br>
-<span>vs. Atlético Lobos</span>
+Panel de <span>Planeta Deporte</span>
 </h1>
 
 <p>
-30/08/2026 · Liga Lobos
+Desde acá podés administrar los partidos de la plataforma.
 </p>
 
-<div class="photos">
+</div>
 
-<script>
-for(let i=1;i<=16;i++){
- document.write(`
- <div class="photo" onclick="seleccionar(this)">
- ⚽
- <div class="watermark">PLANETA DEPORTE</div>
- </div>
- `)
-}
-</script>
+
+<div class="adminbox">
+
+<h2>➕ Agregar partido</h2>
+
+<div class="form">
+
+<input id="nombre" placeholder="Nombre del partido">
+
+<select id="deporte">
+<option value="FÚTBOL">⚽ Fútbol</option>
+<option value="PÁDEL">🎾 Pádel</option>
+</select>
+
+<input id="fecha" type="date">
+
+<input id="torneo" placeholder="Torneo">
+
+<input id="precio" type="number" placeholder="Precio por foto">
 
 </div>
 
 <br>
 
-<button class="green" onclick="comprar()">
-COMPRAR FOTOS
+<button class="green" onclick="agregarPartido()">
+PUBLICAR PARTIDO
 </button>
+
+</div>
+
+
+<div class="adminbox">
+
+<h2>📋 Partidos</h2>
+
+<div class="admin-list" id="adminLista"></div>
+
+</div>
 
 </main>
 
 
+<div class="cart" id="cart">
+<span id="cartText">0 fotos seleccionadas</span>
+<br>
+<button class="green" onclick="comprar()">VER CARRITO</button>
+</div>
+
+
 <script>
 
-function abrirGaleria(){
- document.getElementById("home").style.display="none";
- document.getElementById("galeria").style.display="block";
- window.scrollTo(0,0);
+const fotosDemo=[
+"https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=900&q=80",
+"https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=901&q=80",
+"https://images.unsplash.com/photo-1553778263-73a83bab9b0c?auto=format&fit=crop&w=900&q=80",
+"https://images.unsplash.com/photo-1521412644187-c49fa049e84d?auto=format&fit=crop&w=900&q=80",
+"https://images.unsplash.com/photo-1518609878373-06d740f60d8b?auto=format&fit=crop&w=900&q=80",
+"https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=902&q=80",
+"https://images.unsplash.com/photo-1553778263-73a83bab9b0c?auto=format&fit=crop&w=902&q=80",
+"https://images.unsplash.com/photo-1521412644187-c49fa049e84d?auto=format&fit=crop&w=902&q=80"
+];
+
+let partidos=JSON.parse(localStorage.getItem("planetaPartidos")) || [
+
+{
+id:1,
+nombre:"Lobos Athletic vs. Atlético Lobos",
+deporte:"FÚTBOL",
+fecha:"30/08/2026",
+torneo:"Liga Lobos",
+precio:250,
+publicado:true,
+portada:fotosDemo[0]
+},
+
+{
+id:2,
+nombre:"Independiente vs. Deportivo X",
+deporte:"FÚTBOL",
+fecha:"29/08/2026",
+torneo:"Torneo Apertura",
+precio:250,
+publicado:true,
+portada:fotosDemo[2]
+},
+
+{
+id:3,
+nombre:"Open Planeta Deporte",
+deporte:"PÁDEL",
+fecha:"29/08/2026",
+torneo:"Torneo Pádel",
+precio:300,
+publicado:true,
+portada:fotosDemo[3]
 }
 
-function volver(){
- document.getElementById("galeria").style.display="none";
- document.getElementById("home").style.display="block";
- window.scrollTo(0,0);
+];
+
+let partidoActual=null;
+let seleccionadas=[];
+
+
+function guardar(){
+localStorage.setItem("planetaPartidos",JSON.stringify(partidos));
 }
 
-function seleccionar(elemento){
- elemento.style.outline =
- elemento.style.outline ? "" : "3px solid #8cff00";
+
+function mostrarPartidos(){
+
+const contenedor=document.getElementById("partidos");
+
+contenedor.innerHTML="";
+
+partidos
+.filter(p=>p.publicado)
+.forEach(p=>{
+
+contenedor.innerHTML+=`
+
+<div class="card">
+
+<div class="cover"
+style="background-image:url('${p.portada}')">
+</div>
+
+<div class="cardbody">
+
+<div class="tag">${p.deporte}</div>
+
+<h3>${p.nombre}</h3>
+
+<p>${p.fecha} · ${p.torneo}</p>
+
+<p>📸 8 fotos de demostración</p>
+
+<button class="full"
+onclick="abrirGaleria(${p.id})">
+VER GALERÍA
+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
 }
+
+
+function abrirGaleria(id){
+
+partidoActual=partidos.find(p=>p.id===id);
+
+seleccionadas=[];
+
+document.getElementById("home").style.display="none";
+document.getElementById("admin").style.display="none";
+document.getElementById("galeria").style.display="block";
+
+document.getElementById("galeriaDeporte").innerText=partidoActual.deporte;
+
+document.getElementById("galeriaTitulo").innerText=partidoActual.nombre;
+
+document.getElementById("galeriaInfo").innerText=
+partidoActual.fecha+" · "+partidoActual.torneo+
+" · $"+partidoActual.precio+" por foto";
+
+const contenedor=document.getElementById("fotos");
+
+contenedor.innerHTML="";
+
+fotosDemo.forEach((foto,i)=>{
+
+contenedor.innerHTML+=`
+
+<div
+class="photo"
+style="background-image:url('${foto}')"
+onclick="seleccionar(${i},this)"
+>
+
+<div class="check">✓</div>
+
+</div>
+
+`;
+
+});
+
+actualizarCarrito();
+
+window.scrollTo(0,0);
+
+}
+
+
+function seleccionar(i,elemento){
+
+if(seleccionadas.includes(i)){
+
+seleccionadas=seleccionadas.filter(x=>x!==i);
+
+elemento.classList.remove("selected");
+
+}else{
+
+seleccionadas.push(i);
+
+elemento.classList.add("selected");
+
+}
+
+actualizarCarrito();
+
+}
+
+
+function actualizarCarrito(){
+
+const cart=document.getElementById("cart");
+
+if(seleccionadas.length===0){
+
+cart.style.display="none";
+
+return;
+
+}
+
+cart.style.display="block";
+
+const total=seleccionadas.length*partidoActual.precio;
+
+document.getElementById("cartText").innerText=
+seleccionadas.length+
+" fotos · $"+
+total;
+
+}
+
 
 function comprar(){
- alert(
- "Perfecto. Acá conectaremos Mercado Pago y el sistema de descarga."
- );
+
+if(seleccionadas.length===0){
+
+alert("Seleccioná alguna foto primero.");
+
+return;
+
 }
+
+const total=seleccionadas.length*partidoActual.precio;
+
+alert(
+"Carrito de Planeta Deporte\n\n"+
+partidoActual.nombre+
+"\n"+
+seleccionadas.length+
+" fotos\n\n"+
+"Total: $"+
+total+
+"\n\n"+
+"Acá conectaremos Mercado Pago."
+);
+
+}
+
+
+function volver(){
+
+document.getElementById("galeria").style.display="none";
+
+document.getElementById("home").style.display="block";
+
+document.getElementById("cart").style.display="none";
+
+mostrarPartidos();
+
+window.scrollTo(0,0);
+
+}
+
 
 function buscar(){
- let texto=document
- .getElementById("busqueda")
- .value
- .toLowerCase();
 
- let tarjetas=document.querySelectorAll(".card");
+const texto=
+document.getElementById("busqueda")
+.value
+.toLowerCase();
 
- tarjetas.forEach(t=>{
-   t.style.display=
-   t.innerText.toLowerCase().includes(texto)
-   ? "block"
-   : "none";
- });
+document.querySelectorAll(".card")
+.forEach(card=>{
+
+card.style.display=
+card.innerText.toLowerCase().includes(texto)
+?"block"
+:"none";
+
+});
+
 }
+
+
+function abrirAdmin(){
+
+document.getElementById("home").style.display="none";
+document.getElementById("galeria").style.display="none";
+document.getElementById("admin").style.display="block";
+
+mostrarAdmin();
+
+window.scrollTo(0,0);
+
+}
+
+
+function cerrarAdmin(){
+
+document.getElementById("admin").style.display="none";
+document.getElementById("home").style.display="block";
+
+mostrarPartidos();
+
+window.scrollTo(0,0);
+
+}
+
+
+function agregarPartido(){
+
+const nombre=document.getElementById("nombre").value;
+const deporte=document.getElementById("deporte").value;
+const fechaOriginal=document.getElementById("fecha").value;
+const torneo=document.getElementById("torneo").value;
+const precio=document.getElementById("precio").value;
+
+if(!nombre || !fechaOriginal || !torneo || !precio){
+
+alert("Completá todos los campos.");
+
+return;
+
+}
+
+const partes=fechaOriginal.split("-");
+
+const fecha=partes[2]+"/"+partes[1]+"/"+partes[0];
+
+const nuevo={
+
+id:Date.now(),
+
+nombre:nombre,
+
+deporte:deporte,
+
+fecha:fecha,
+
+torneo:torneo,
+
+precio:Number(precio),
+
+publicado:true,
+
+portada:
+deporte==="FÚTBOL"
+?fotosDemo[0]
+:fotosDemo[3]
+
+};
+
+partidos.push(nuevo);
+
+guardar();
+
+document.getElementById("nombre").value="";
+document.getElementById("fecha").value="";
+document.getElementById("torneo").value="";
+document.getElementById("precio").value="";
+
+mostrarAdmin();
+mostrarPartidos();
+
+alert("Partido publicado correctamente.");
+
+}
+
+
+function mostrarAdmin(){
+
+const lista=document.getElementById("adminLista");
+
+lista.innerHTML="";
+
+partidos.forEach(p=>{
+
+lista.innerHTML+=`
+
+<div class="admin-item ${p.publicado?"":"hidden"}">
+
+<div>
+
+<strong>${p.nombre}</strong>
+
+<br>
+
+<small>
+${p.deporte} · ${p.fecha} · $${p.precio}
+</small>
+
+</div>
+
+<div class="actions">
+
+<button
+class="green"
+onclick="togglePartido(${p.id})"
+>
+${p.publicado?"OCULTAR":"PUBLICAR"}
+</button>
+
+<button
+class="menu"
+onclick="eliminarPartido(${p.id})"
+>
+ELIMINAR
+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+
+function togglePartido(id){
+
+const p=partidos.find(x=>x.id===id);
+
+p.publicado=!p.publicado;
+
+guardar();
+
+mostrarAdmin();
+mostrarPartidos();
+
+}
+
+
+function eliminarPartido(id){
+
+if(!confirm("¿Eliminar este partido?")) return;
+
+partidos=partidos.filter(x=>x.id!==id);
+
+guardar();
+
+mostrarAdmin();
+mostrarPartidos();
+
+}
+
+
+mostrarPartidos();
 
 </script>
 
