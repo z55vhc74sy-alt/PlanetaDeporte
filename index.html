@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Planeta Deporte</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ background:#050607;
+ color:white;
+ font-family:Arial,sans-serif
+}
+header{
+ padding:18px 6%;
+ border-bottom:1px solid #222;
+ display:flex;
+ justify-content:space-between;
+ align-items:center
+}
+.logo{
+ font-size:25px;
+ font-weight:900;
+ line-height:.8
+}
+.logo span{display:block}
+button{
+ cursor:pointer;
+ border-radius:9px;
+ padding:11px 16px;
+ font-weight:bold
+}
+.menu{
+ background:#15191a;
+ color:white;
+ border:1px solid #333
+}
+.green{
+ background:#8cff00;
+ color:#000;
+ border:0
+}
+main{
+ max-width:1100px;
+ margin:auto;
+ padding:45px 6%
+}
+.hero{padding:30px 0}
+.small{
+ color:#8cff00;
+ font-size:12px;
+ font-weight:bold;
+ letter-spacing:2px
+}
+h1{
+ font-size:clamp(42px,8vw,75px);
+ line-height:.95;
+ letter-spacing:-4px;
+ margin:12px 0
+}
+h1 span{color:#8cff00}
+p{color:#aaa;font-size:17px}
+.search{
+ display:flex;
+ max-width:700px;
+ margin-top:25px
+}
+.search input{
+ flex:1;
+ padding:16px;
+ background:#15191a;
+ border:1px solid #444;
+ color:white;
+ border-radius:10px 0 0 10px;
+ font-size:16px
+}
+.search button{border-radius:0 10px 10px 0}
+.cards{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:16px
+}
+.card{
+ background:#111516;
+ border:1px solid #292f31;
+ border-radius:14px;
+ overflow:hidden
+}
+.cover{
+ height:170px;
+ display:grid;
+ place-items:center;
+ font-size:50px;
+ background:linear-gradient(135deg,#354043,#101313)
+}
+.cardbody{padding:17px}
+.tag{
+ color:#8cff00;
+ font-size:11px;
+ font-weight:bold
+}
+.card h3{margin:8px 0}
+.full{
+ width:100%;
+ margin-top:14px;
+ background:#202526;
+ color:white;
+ border:1px solid #343b3d
+}
+.gallery{
+ display:none
+}
+.photos{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:8px
+}
+.photo{
+ aspect-ratio:1;
+ background:linear-gradient(135deg,#354043,#101313);
+ border-radius:9px;
+ display:grid;
+ place-items:center;
+ font-size:35px;
+ position:relative
+}
+.watermark{
+ position:absolute;
+ bottom:8px;
+ left:8px;
+ font-size:10px;
+ font-weight:bold
+}
+.back{
+ margin-bottom:25px
+}
+@media(max-width:700px){
+ .cards{grid-template-columns:1fr}
+ .photos{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">
+<span>planeta</span>
+<span>deporte</span>
+</div>
+
+<button class="menu" onclick="alert('Panel de fotógrafos próximamente')">
+Panel fotógrafos
+</button>
+</header>
+
+<main id="home">
+
+<section class="hero">
+
+<div class="small">FOTOGRAFÍA DEPORTIVA</div>
+
+<h1>
+Encontrá <span>las fotos</span><br>
+de tu partido
+</h1>
+
+<p>
+Buscá tu partido, elegí tus fotos y llevate tus mejores momentos.
+</p>
+
+<div class="search">
+<input id="busqueda" placeholder="Busca por club, torneo o fecha">
+<button class="green" onclick="buscar()">BUSCAR</button>
+</div>
+
+</section>
+
+<h2>Partidos disponibles</h2>
+
+<div class="cards" id="partidos">
+
+<div class="card">
+<div class="cover">⚽</div>
+
+<div class="cardbody">
+<div class="tag">FÚTBOL</div>
+
+<h3>Lobos Athletic vs. Atlético Lobos</h3>
+
+<p>
+30/08/2026 · Liga Lobos
+</p>
+
+<button class="full" onclick="abrirGaleria()">
+VER GALERÍA
+</button>
+</div>
+</div>
+
+
+<div class="card">
+<div class="cover">⚽</div>
+
+<div class="cardbody">
+<div class="tag">FÚTBOL</div>
+
+<h3>Independiente vs. Deportivo X</h3>
+
+<p>
+29/08/2026 · Torneo Apertura
+</p>
+
+<button class="full" onclick="abrirGaleria()">
+VER GALERÍA
+</button>
+</div>
+</div>
+
+
+<div class="card">
+<div class="cover">🎾</div>
+
+<div class="cardbody">
+<div class="tag">PÁDEL</div>
+
+<h3>Open Planeta Deporte</h3>
+
+<p>
+29/08/2026 · Torneo Pádel
+</p>
+
+<button class="full" onclick="abrirGaleria()">
+VER GALERÍA
+</button>
+</div>
+</div>
+
+</div>
+
+</main>
+
+
+<main id="galeria" class="gallery">
+
+<button class="menu back" onclick="volver()">
+← Volver
+</button>
+
+<div class="small">FÚTBOL</div>
+
+<h1>
+Lobos Athletic<br>
+<span>vs. Atlético Lobos</span>
+</h1>
+
+<p>
+30/08/2026 · Liga Lobos
+</p>
+
+<div class="photos">
+
+<script>
+for(let i=1;i<=16;i++){
+ document.write(`
+ <div class="photo" onclick="seleccionar(this)">
+ ⚽
+ <div class="watermark">PLANETA DEPORTE</div>
+ </div>
+ `)
+}
+</script>
+
+</div>
+
+<br>
+
+<button class="green" onclick="comprar()">
+COMPRAR FOTOS
+</button>
+
+</main>
+
+
+<script>
+
+function abrirGaleria(){
+ document.getElementById("home").style.display="none";
+ document.getElementById("galeria").style.display="block";
+ window.scrollTo(0,0);
+}
+
+function volver(){
+ document.getElementById("galeria").style.display="none";
+ document.getElementById("home").style.display="block";
+ window.scrollTo(0,0);
+}
+
+function seleccionar(elemento){
+ elemento.style.outline =
+ elemento.style.outline ? "" : "3px solid #8cff00";
+}
+
+function comprar(){
+ alert(
+ "Perfecto. Acá conectaremos Mercado Pago y el sistema de descarga."
+ );
+}
+
+function buscar(){
+ let texto=document
+ .getElementById("busqueda")
+ .value
+ .toLowerCase();
+
+ let tarjetas=document.querySelectorAll(".card");
+
+ tarjetas.forEach(t=>{
+   t.style.display=
+   t.innerText.toLowerCase().includes(texto)
+   ? "block"
+   : "none";
+ });
+}
+
+</script>
+
+</body>
+</html>
