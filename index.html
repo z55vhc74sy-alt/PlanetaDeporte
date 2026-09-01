@@ -254,6 +254,26 @@ flex-wrap:wrap
 opacity:.45
 }
 
+.uploadbox{
+margin-top:18px;
+padding:18px;
+border:1px dashed #555;
+border-radius:12px;
+background:#15191a
+}
+
+.uploadbox input{
+width:100%;
+margin:12px 0;
+color:white
+}
+
+.status{
+color:#8cff00;
+font-size:14px;
+margin-top:10px
+}
+
 @media(max-width:700px){
 
 .cards{
@@ -297,6 +317,7 @@ letter-spacing:-2px
 </div>
 
 </header>
+
 
 <main id="home">
 
@@ -359,7 +380,7 @@ Panel de <span>Planeta Deporte</span>
 </h1>
 
 <p>
-Desde acá podés administrar los partidos de la plataforma.
+Creá el partido y después subí todas las fotos directamente desde acá.
 </p>
 
 </div>
@@ -407,26 +428,25 @@ PUBLICAR PARTIDO
 
 
 <div class="cart" id="cart">
+
 <span id="cartText">0 fotos seleccionadas</span>
+
 <br>
-<button class="green" onclick="comprar()">VER CARRITO</button>
+
+<button class="green" onclick="comprar()">
+VER CARRITO
+</button>
+
 </div>
 
 
-<script>
+<script type="module">
 
-const fotosDemo=[
-"https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=900&q=80",
-"https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=901&q=80",
-"https://images.unsplash.com/photo-1553778263-73a83bab9b0c?auto=format&fit=crop&w=900&q=80",
-"https://images.unsplash.com/photo-1521412644187-c49fa049e84d?auto=format&fit=crop&w=900&q=80",
-"https://images.unsplash.com/photo-1518609878373-06d740f60d8b?auto=format&fit=crop&w=900&q=80",
-"https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=902&q=80",
-"https://images.unsplash.com/photo-1553778263-73a83bab9b0c?auto=format&fit=crop&w=902&q=80",
-"https://images.unsplash.com/photo-1521412644187-c49fa049e84d?auto=format&fit=crop&w=902&q=80"
-];
+import { upload } from "https://esm.sh/@vercel/blob/client";
 
-let partidos=JSON.parse(localStorage.getItem("planetaPartidos")) || [
+
+let partidos =
+JSON.parse(localStorage.getItem("planetaPartidos")) || [
 
 {
 id:1,
@@ -436,7 +456,7 @@ fecha:"30/08/2026",
 torneo:"Liga Lobos",
 precio:250,
 publicado:true,
-portada:fotosDemo[0]
+folder:"FUTBOL/partido prueba"
 },
 
 {
@@ -447,7 +467,7 @@ fecha:"29/08/2026",
 torneo:"Torneo Apertura",
 precio:250,
 publicado:true,
-portada:fotosDemo[2]
+folder:"FUTBOL/independiente-vs-deportivo-x"
 },
 
 {
@@ -458,17 +478,35 @@ fecha:"29/08/2026",
 torneo:"Torneo Pádel",
 precio:300,
 publicado:true,
-portada:fotosDemo[3]
+folder:"PADEL/open-planeta-deporte"
 }
 
 ];
+
 
 let partidoActual=null;
 let seleccionadas=[];
 
 
 function guardar(){
-localStorage.setItem("planetaPartidos",JSON.stringify(partidos));
+
+localStorage.setItem(
+"planetaPartidos",
+JSON.stringify(partidos)
+);
+
+}
+
+
+function slug(texto){
+
+return texto
+.toLowerCase()
+.normalize("NFD")
+.replace(/[\u0300-\u036f]/g,"")
+.replace(/[^a-z0-9]+/g,"-")
+.replace(/^-|-$/g,"");
+
 }
 
 
@@ -487,7 +525,7 @@ contenedor.innerHTML+=`
 <div class="card">
 
 <div class="cover"
-style="background-image:url('${p.portada}')">
+id="cover-${p.id}">
 </div>
 
 <div class="cardbody">
@@ -498,7 +536,7 @@ style="background-image:url('${p.portada}')">
 
 <p>${p.fecha} · ${p.torneo}</p>
 
-<p>📸 8 fotos de demostración</p>
+<p>📸 Fotos disponibles</p>
 
 <button class="full"
 onclick="abrirGaleria(${p.id})">
@@ -511,14 +549,47 @@ VER GALERÍA
 
 `;
 
+cargarPortada(p);
+
 });
 
 }
 
 
-function abrirGaleria(id){
+async function cargarPortada(partido){
 
-partidoActual=partidos.find(p=>p.id===id);
+try{
+
+const respuesta =
+await fetch(
+"/api/photos?prefix="+
+encodeURIComponent(partido.folder)
+);
+
+const datos=await respuesta.json();
+
+if(datos.blobs && datos.blobs.length){
+
+document.getElementById(
+"cover-"+partido.id
+).style.backgroundImage=
+"url('"+datos.blobs[0].url+"')";
+
+}
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
+
+async function abrirGaleria(id){
+
+partidoActual=
+partidos.find(p=>p.id===id);
 
 seleccionadas=[];
 
@@ -526,25 +597,53 @@ document.getElementById("home").style.display="none";
 document.getElementById("admin").style.display="none";
 document.getElementById("galeria").style.display="block";
 
-document.getElementById("galeriaDeporte").innerText=partidoActual.deporte;
+document.getElementById("galeriaDeporte")
+.innerText=partidoActual.deporte;
 
-document.getElementById("galeriaTitulo").innerText=partidoActual.nombre;
+document.getElementById("galeriaTitulo")
+.innerText=partidoActual.nombre;
 
-document.getElementById("galeriaInfo").innerText=
-partidoActual.fecha+" · "+partidoActual.torneo+
-" · $"+partidoActual.precio+" por foto";
+document.getElementById("galeriaInfo")
+.innerText=
+partidoActual.fecha+
+" · "+
+partidoActual.torneo+
+" · $"+
+partidoActual.precio+
+" por foto";
 
-const contenedor=document.getElementById("fotos");
+const contenedor=
+document.getElementById("fotos");
+
+contenedor.innerHTML=
+"<p>Cargando fotos...</p>";
+
+try{
+
+const respuesta=
+await fetch(
+"/api/photos?prefix="+
+encodeURIComponent(partidoActual.folder)
+);
+
+const datos=await respuesta.json();
 
 contenedor.innerHTML="";
 
-fotosDemo.forEach((foto,i)=>{
+if(!datos.blobs || datos.blobs.length===0){
+
+contenedor.innerHTML=
+"<p>Todavía no hay fotos cargadas.</p>";
+
+}else{
+
+datos.blobs.forEach((foto,i)=>{
 
 contenedor.innerHTML+=`
 
 <div
 class="photo"
-style="background-image:url('${foto}')"
+style="background-image:url('${foto.url}')"
 onclick="seleccionar(${i},this)"
 >
 
@@ -555,6 +654,17 @@ onclick="seleccionar(${i},this)"
 `;
 
 });
+
+}
+
+}catch(error){
+
+contenedor.innerHTML=
+"<p>No se pudieron cargar las fotos.</p>";
+
+console.error(error);
+
+}
 
 actualizarCarrito();
 
@@ -567,7 +677,8 @@ function seleccionar(i,elemento){
 
 if(seleccionadas.includes(i)){
 
-seleccionadas=seleccionadas.filter(x=>x!==i);
+seleccionadas=
+seleccionadas.filter(x=>x!==i);
 
 elemento.classList.remove("selected");
 
@@ -586,7 +697,8 @@ actualizarCarrito();
 
 function actualizarCarrito(){
 
-const cart=document.getElementById("cart");
+const cart=
+document.getElementById("cart");
 
 if(seleccionadas.length===0){
 
@@ -598,9 +710,12 @@ return;
 
 cart.style.display="block";
 
-const total=seleccionadas.length*partidoActual.precio;
+const total=
+seleccionadas.length*
+partidoActual.precio;
 
-document.getElementById("cartText").innerText=
+document.getElementById("cartText")
+.innerText=
 seleccionadas.length+
 " fotos · $"+
 total;
@@ -618,7 +733,9 @@ return;
 
 }
 
-const total=seleccionadas.length*partidoActual.precio;
+const total=
+seleccionadas.length*
+partidoActual.precio;
 
 alert(
 "Carrito de Planeta Deporte\n\n"+
@@ -637,11 +754,14 @@ total+
 
 function volver(){
 
-document.getElementById("galeria").style.display="none";
+document.getElementById("galeria")
+.style.display="none";
 
-document.getElementById("home").style.display="block";
+document.getElementById("home")
+.style.display="block";
 
-document.getElementById("cart").style.display="none";
+document.getElementById("cart")
+.style.display="none";
 
 mostrarPartidos();
 
@@ -661,7 +781,9 @@ document.querySelectorAll(".card")
 .forEach(card=>{
 
 card.style.display=
-card.innerText.toLowerCase().includes(texto)
+card.innerText
+.toLowerCase()
+.includes(texto)
 ?"block"
 :"none";
 
@@ -672,9 +794,14 @@ card.innerText.toLowerCase().includes(texto)
 
 function abrirAdmin(){
 
-document.getElementById("home").style.display="none";
-document.getElementById("galeria").style.display="none";
-document.getElementById("admin").style.display="block";
+document.getElementById("home")
+.style.display="none";
+
+document.getElementById("galeria")
+.style.display="none";
+
+document.getElementById("admin")
+.style.display="block";
 
 mostrarAdmin();
 
@@ -685,8 +812,11 @@ window.scrollTo(0,0);
 
 function cerrarAdmin(){
 
-document.getElementById("admin").style.display="none";
-document.getElementById("home").style.display="block";
+document.getElementById("admin")
+.style.display="none";
+
+document.getElementById("home")
+.style.display="block";
 
 mostrarPartidos();
 
@@ -697,13 +827,27 @@ window.scrollTo(0,0);
 
 function agregarPartido(){
 
-const nombre=document.getElementById("nombre").value;
-const deporte=document.getElementById("deporte").value;
-const fechaOriginal=document.getElementById("fecha").value;
-const torneo=document.getElementById("torneo").value;
-const precio=document.getElementById("precio").value;
+const nombre=
+document.getElementById("nombre").value.trim();
 
-if(!nombre || !fechaOriginal || !torneo || !precio){
+const deporte=
+document.getElementById("deporte").value;
+
+const fechaOriginal=
+document.getElementById("fecha").value;
+
+const torneo=
+document.getElementById("torneo").value.trim();
+
+const precio=
+document.getElementById("precio").value;
+
+if(
+!nombre ||
+!fechaOriginal ||
+!torneo ||
+!precio
+){
 
 alert("Completá todos los campos.");
 
@@ -711,9 +855,18 @@ return;
 
 }
 
-const partes=fechaOriginal.split("-");
+const partes=
+fechaOriginal.split("-");
 
-const fecha=partes[2]+"/"+partes[1]+"/"+partes[0];
+const fecha=
+partes[2]+"/"+
+partes[1]+"/"+
+partes[0];
+
+const carpeta=
+deporte==="FÚTBOL"
+?"FUTBOL"
+:"PADEL";
 
 const nuevo={
 
@@ -731,10 +884,8 @@ precio:Number(precio),
 
 publicado:true,
 
-portada:
-deporte==="FÚTBOL"
-?fotosDemo[0]
-:fotosDemo[3]
+folder:
+carpeta+"/"+slug(nombre)
 
 };
 
@@ -750,14 +901,18 @@ document.getElementById("precio").value="";
 mostrarAdmin();
 mostrarPartidos();
 
-alert("Partido publicado correctamente.");
+alert(
+"Partido creado correctamente.\n\n"+
+"Ahora podés subir las fotos."
+);
 
 }
 
 
 function mostrarAdmin(){
 
-const lista=document.getElementById("adminLista");
+const lista=
+document.getElementById("adminLista");
 
 lista.innerHTML="";
 
@@ -774,8 +929,34 @@ lista.innerHTML+=`
 <br>
 
 <small>
-${p.deporte} · ${p.fecha} · $${p.precio}
+${p.deporte} ·
+${p.fecha} ·
+$${p.precio}
 </small>
+
+<div class="uploadbox">
+
+<strong>📸 Subir fotos</strong>
+
+<input
+type="file"
+id="files-${p.id}"
+accept="image/jpeg,image/png,image/webp"
+multiple
+>
+
+<button
+class="green"
+onclick="subirFotos(${p.id})">
+SUBIR FOTOS
+</button>
+
+<div
+class="status"
+id="status-${p.id}">
+</div>
+
+</div>
 
 </div>
 
@@ -783,16 +964,18 @@ ${p.deporte} · ${p.fecha} · $${p.precio}
 
 <button
 class="green"
-onclick="togglePartido(${p.id})"
->
+onclick="togglePartido(${p.id})">
+
 ${p.publicado?"OCULTAR":"PUBLICAR"}
+
 </button>
 
 <button
 class="menu"
-onclick="eliminarPartido(${p.id})"
->
+onclick="eliminarPartido(${p.id})">
+
 ELIMINAR
+
 </button>
 
 </div>
@@ -806,9 +989,85 @@ ELIMINAR
 }
 
 
+window.subirFotos=async function(id){
+
+const partido=
+partidos.find(p=>p.id===id);
+
+const input=
+document.getElementById("files-"+id);
+
+const status=
+document.getElementById("status-"+id);
+
+if(!input.files.length){
+
+alert("Seleccioná las fotos primero.");
+
+return;
+
+}
+
+status.innerText=
+"Preparando subida...";
+
+try{
+
+let cantidad=0;
+
+for(const file of input.files){
+
+const pathname=
+partido.folder+
+"/"+
+file.name;
+
+status.innerText=
+"Subiendo "+
+(file.name)+
+"...";
+
+await upload(
+pathname,
+file,
+{
+access:"public",
+handleUploadUrl:"/api/upload",
+multipart:true
+}
+);
+
+cantidad++;
+
+}
+
+status.innerText=
+"✅ "+cantidad+
+" fotos subidas correctamente.";
+
+input.value="";
+
+}catch(error){
+
+console.error(error);
+
+status.innerText=
+"❌ Error al subir las fotos.";
+
+alert(
+"No se pudieron subir las fotos.\n"+
+error.message
+);
+
+}
+
+};
+
+
 function togglePartido(id){
 
-const p=partidos.find(x=>x.id===id);
+const p=
+partidos.find(x=>x.id===id);
 
 p.publicado=!p.publicado;
 
@@ -822,9 +1081,12 @@ mostrarPartidos();
 
 function eliminarPartido(id){
 
-if(!confirm("¿Eliminar este partido?")) return;
+if(!confirm(
+"¿Eliminar este partido?"
+)) return;
 
-partidos=partidos.filter(x=>x.id!==id);
+partidos=
+partidos.filter(x=>x.id!==id);
 
 guardar();
 
@@ -832,6 +1094,18 @@ mostrarAdmin();
 mostrarPartidos();
 
 }
+
+
+window.abrirAdmin=abrirAdmin;
+window.cerrarAdmin=cerrarAdmin;
+window.abrirGaleria=abrirGaleria;
+window.seleccionar=seleccionar;
+window.comprar=comprar;
+window.volver=volver;
+window.buscar=buscar;
+window.agregarPartido=agregarPartido;
+window.togglePartido=togglePartido;
+window.eliminarPartido=eliminarPartido;
 
 
 mostrarPartidos();
