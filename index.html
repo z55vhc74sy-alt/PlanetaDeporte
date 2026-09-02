@@ -940,15 +940,21 @@ function comprar(){
 
 }
 
-
 function continuarPago(){
 
+  const total=
+  seleccionadas.length*
+  partidoActual.precio;
+
   alert(
-    "Siguiente paso: conectar Mercado Pago."
+    "PAGO POR TRANSFERENCIA\n\n"+
+    "Total a pagar: $"+total+"\n\n"+
+    "Alias: TU_ALIAS_AQUI\n\n"+
+    "Después de transferir, enviá el comprobante."
   );
 
-}
 
+  }
 
 
 
