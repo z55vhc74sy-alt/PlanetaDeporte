@@ -1019,8 +1019,7 @@ function continuarPago(){
 
     <button
       class="green full"
-      onclick="window.open('https://wa.me/5492227582080?text=Hola%20Planeta%20Deporte,%20ya%20realic%C3%A9%20la%20transferencia%20por%20las%20fotos.%20Adjunto%20el%20comprobante.','_blank')">
-      ABRIR WHATSAPP
+     onclick="window.open('https://wa.me/5492227582080?text='+encodeURIComponent('Hola Planeta Deporte. Ya realicé la transferencia por '+seleccionadas.length+' foto(s) de '+partidoActual.nombre+'. Total: $'+(seleccionadas.length*partidoActual.precio)+'. Fotos seleccionadas: '+seleccionadas.map(i=>'#'+(i+1)).join(', ')+'. Adjunto el comprobante.'),'_blank')"#      ABRIR WHATSAPP
     </button>
 
     <button
