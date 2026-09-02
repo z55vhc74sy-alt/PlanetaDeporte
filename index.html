@@ -441,7 +441,43 @@ Buscá tu partido, elegí tus fotos y llevate tus mejores momentos.
 
 </main>
 
+<main id="loginAdmin" class="admin">
 
+  <button class="menu" onclick="cerrarLogin()">← Volver a la página</button>
+
+  <div style="margin-top:30px">
+    <div class="small">ACCESO PRIVADO</div>
+
+    <h1>
+      Administración <span>Planeta Deporte</span>
+    </h1>
+
+    <p>Ingresá con tu usuario y contraseña.</p>
+  </div>
+
+  <div class="adminbox">
+    <div class="form">
+
+      <input id="loginUsuario"
+             placeholder="Usuario"
+             autocomplete="username">
+
+      <input id="loginPassword"
+             type="password"
+             placeholder="Contraseña"
+             autocomplete="current-password">
+
+      <button class="green full"
+              onclick="iniciarSesion()">
+        INGRESAR
+      </button>
+
+      <p id="loginError"></p>
+
+    </div>
+  </div>
+
+</main>
 <main id="admin" class="admin">
 
 <button class="menu" onclick="cerrarAdmin()">← Volver a la página</button>
@@ -866,7 +902,77 @@ card.innerText
 
 }
 
+function abrirLogin(){
 
+  document.getElementById("home").style.display="none";
+  document.getElementById("galeria").style.display="none";
+  document.getElementById("admin").style.display="none";
+  document.getElementById("loginAdmin").style.display="block";
+
+  document.getElementById("loginError").innerText="";
+  document.getElementById("loginUsuario").value="";
+  document.getElementById("loginPassword").value="";
+
+  window.scrollTo(0,0);
+}
+
+
+function cerrarLogin(){
+
+  document.getElementById("loginAdmin").style.display="none";
+  document.getElementById("home").style.display="block";
+
+  window.scrollTo(0,0);
+}
+
+
+async function iniciarSesion(){
+
+  const usuario=
+  document.getElementById("loginUsuario").value.trim();
+
+  const password=
+  document.getElementById("loginPassword").value;
+
+  const error=
+  document.getElementById("loginError");
+
+  error.innerText="Ingresando...";
+
+  try{
+
+    const respuesta=await fetch("/api/login",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        usuario,
+        password
+      })
+    });
+
+    const datos=await respuesta.json();
+
+    if(!respuesta.ok || !datos.ok){
+      error.innerText="Usuario o contraseña incorrectos.";
+      return;
+    }
+
+    document.getElementById("loginAdmin").style.display="none";
+    document.getElementById("admin").style.display="block";
+
+    mostrarAdmin();
+    window.scrollTo(0,0);
+
+  }catch(e){
+
+    console.error(e);
+    error.innerText="No se pudo iniciar sesión.";
+
+  }
+
+}
 function abrirAdmin(){
 
 document.getElementById("home")
