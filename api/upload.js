@@ -13,7 +13,7 @@ export default async function handler(request) {
           "image/jpeg",
           "image/png",
           "image/webp"
-      
+    ],  
         addRandomSuffix: true
       }),
 
