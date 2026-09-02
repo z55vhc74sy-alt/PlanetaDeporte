@@ -946,18 +946,91 @@ function continuarPago(){
   seleccionadas.length*
   partidoActual.precio;
 
-  alert(
-    "PAGO POR TRANSFERENCIA\n\n"+
-    "Total a pagar: $"+total+"\n\n"+
-    "Alias: TU_ALIAS_AQUI\n\n"+
-    "Después de transferir, enviá el comprobante."
-  );
+  const anterior=
+  document.getElementById("pagoTransferencia");
 
+  if(anterior) anterior.remove();
 
-  }
+  const modal=document.createElement("div");
+  modal.id="pagoTransferencia";
+
+  modal.style.cssText=`
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.92);
+    z-index:10000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  `;
+
+  const caja=document.createElement("div");
+
+  caja.style.cssText=`
+    width:100%;
+    max-width:520px;
+    background:#111516;
+    border:1px solid #8cff00;
+    border-radius:16px;
+    padding:28px;
+    color:white;
+  `;
+
+  caja.innerHTML=`
+    <div style="color:#8cff00;font-weight:bold;font-size:20px">
+      PAGO POR TRANSFERENCIA
+    </div>
+
+    <p style="margin-top:25px">Total a pagar</p>
+
+    <div style="font-size:40px;font-weight:bold;color:#8cff00">
+      $${total}
+    </div>
+
+    <hr style="border:0;border-top:1px solid #333;margin:25px 0">
+
+    <p>Alias</p>
+
+    <div style="font-size:22px;font-weight:bold">
+      tgonzalez.bru.8530
+    </div>
+
+    <p style="margin-top:22px">Titular</p>
+
+    <div style="font-size:20px">
+      Trinidad Gonzalez
+    </div>
+
+    <hr style="border:0;border-top:1px solid #333;margin:25px 0">
+
+    <div style="color:#8cff00;font-weight:bold;font-size:18px">
+      Enviá el comprobante por WhatsApp
+    </div>
+
+    <div style="font-size:28px;font-weight:bold;margin:12px 0">
+      2227-582080
+    </div>
+
+    <button
+      class="green full"
+      onclick="window.open('https://wa.me/5492227582080?text=Hola%20Planeta%20Deporte,%20ya%20realic%C3%A9%20la%20transferencia%20por%20las%20fotos.%20Adjunto%20el%20comprobante.','_blank')">
+      ABRIR WHATSAPP
+    </button>
+
+    <button
+      class="menu full"
+      onclick="document.getElementById('pagoTransferencia').remove()">
+      VOLVER
+    </button>
+  `;
+
+  modal.appendChild(caja);
+  document.body.appendChild(modal);
+
+}
+
 window.continuarPago = continuarPago;
-
-
 function volver(){
 
 document.getElementById("galeria")
