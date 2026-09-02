@@ -2,7 +2,7 @@ import { handleUpload } from "@vercel/blob/client";
 
 export default async function handler(request) {
   try {
-    const body = await request.json();
+    const body = request.body;
 
     const response = await handleUpload({
       body,
@@ -13,7 +13,7 @@ export default async function handler(request) {
           "image/jpeg",
           "image/png",
           "image/webp"
-        ],
+      
         addRandomSuffix: true
       }),
 
