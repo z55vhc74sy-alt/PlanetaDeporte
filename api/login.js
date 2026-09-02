@@ -1,4 +1,3 @@
-import { handleUpload } from "@vercel/blob/client";
 import crypto from "crypto";
 
 function crearFirma(valor) {
@@ -8,67 +7,39 @@ function crearFirma(valor) {
     .digest("hex");
 }
 
-function sesionValida(request) {
-  const cookie = request.headers.cookie || "";
-  const match = cookie.match(/pd_session=([^;]+)/);
+export default async function handler(req, res) {
 
-  if (!match) return false;
+  if (req.method !== "POST") {
+    return res.status(405).json({ ok: false });
+  }
 
-  const token = match[1];
-  const partes = token.split(".");
+  const { usuario, password } = req.body || {};
 
-  if (partes.length !== 3) return false;
+  const usuarios = {
+    Bauti: process.env.BAUTI_PASSWORD,
+    Stefano: process.env.STEFANO_PASSWORD,
+    Trini: process.env.TRINI_PASSWORD
+  };
 
-  const [usuario, vence, firma] = partes;
-
-  if (Date.now() > Number(vence)) return false;
-
-  const datos = `${usuario}.${vence}`;
-  const firmaCorrecta = crearFirma(datos);
-
-  return crypto.timingSafeEqual(
-    Buffer.from(firma),
-    Buffer.from(firmaCorrecta)
-  );
-}
-
-export default async function handler(request, reply) {
-  try {
-    const body = request.body;
-
-    const response = await handleUpload({
-      body,
-      request,
-
-      onBeforeGenerateToken: async () => {
-
-        if (!sesionValida(request)) {
-          throw new Error("No autorizado");
-        }
-
-        return {
-          allowedContentTypes: [
-            "image/jpeg",
-            "image/png",
-            "image/webp"
-          ],
-          addRandomSuffix: true
-        };
-      },
-
-      onUploadCompleted: async ({ blob }) => {
-        console.log("Foto subida:", blob.url);
-      }
-    });
-
-    return reply.status(200).json(response);
-
-  } catch (error) {
-
-    console.error(error);
-
-    return reply.status(401).json({
-      error: error.message
+  if (!usuarios[usuario] || password !== usuarios[usuario]) {
+    return res.status(401).json({
+      ok: false,
+      error: "Usuario o contraseña incorrectos"
     });
   }
+
+  const vence = Date.now() + (8 * 60 * 60 * 1000);
+  const datos = `${usuario}.${vence}`;
+  const firma = crearFirma(datos);
+  const token = `${datos}.${firma}`;
+
+  res.setHeader(
+    "Set-Cookie",
+    `pd_session=${token}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=28800`
+  );
+
+  return res.status(200).json({
+    ok: true,
+    usuario
+  });
 }
