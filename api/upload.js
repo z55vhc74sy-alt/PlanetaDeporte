@@ -1,6 +1,6 @@
 import { handleUpload } from "@vercel/blob/client";
 
-export default async function handler(request) {
+export default async function handler(request,reply) {
   try {
     const body = request.body;
 
@@ -22,13 +22,13 @@ export default async function handler(request) {
       }
     });
 
-    return Response.json(response);
+    return reply.status(200).json(response);
 
   } catch (error) {
 
     console.error(error);
 
-    return Response.json(
+    return reply.status(400).json(
       { error: error.message },
       { status: 400 }
     );
