@@ -301,18 +301,101 @@ h1{
 letter-spacing:-2px
 }
 }
-</style>
+/* PORTADA 16:9 */
+header.portada{
+  position:relative;
+  top:auto;
+  width:100%;
+  aspect-ratio:16/9;
+  padding:0;
+  margin:0;
+  border:0;
+  display:block;
+  overflow:hidden;
+  background:#050607;
+}
+
+.fotos-portada{
+  position:absolute;
+  inset:0;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  width:100%;
+  height:100%;
+}
+
+.fotos-portada img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  filter:brightness(.70);
+}
+
+.portada::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    to bottom,
+    rgba(0,0,0,.10),
+    rgba(0,0,0,.20)
+  );
+  pointer-events:none;
+}
+
+.logo-portada{
+  position:absolute;
+  z-index:2;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:58%;
+  max-width:720px;
+  height:auto;
+}
+
+.admin-portada{
+  position:absolute;
+  z-index:3;
+  top:18px;
+  right:22px;
+  padding:7px 11px;
+  font-size:11px;
+  opacity:.75;
+}
+
+@media(max-width:700px){
+  .logo-portada{
+    width:72%;
+  }
+
+  .admin-portada{
+    top:8px;
+    right:8px;
+    padding:5px 8px;
+    font-size:9px;
+  }
+}
+</style> 
 </head>
 
 <body>
 
-<header>
+<header class="portada">
 
-<img src="IMG_8853.png" alt="Planeta Deporte" style="width:150px;height:auto;display:block;">
+  <div class="fotos-portada">
+    <img src="30a69660-b77d-4a7b-98e8-b43aef474ddf.jpeg">
+    <img src="7efde490-9d7d-47f1-967d-b9eecc046131.jpeg">
+    <img src="f468cb8b-047c-4708-85b9-25a443a21d14.jpeg">
+  </div>
 
-<div>
-<button class="menu" onclick="abrirAdmin()">Panel administración</button>
-</div>
+  <img class="logo-portada"
+       src="IMG_8853.png"
+       alt="Planeta Deporte">
+
+  <button class="menu admin-portada"
+          onclick="abrirAdmin()">Administración</button>
 
 </header>
 
