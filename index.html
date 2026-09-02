@@ -845,34 +845,113 @@ total;
 
 }
 
-
 function comprar(){
 
-if(seleccionadas.length===0){
+  if(seleccionadas.length===0){
+    alert("Seleccioná alguna foto primero.");
+    return;
+  }
 
-alert("Seleccioná alguna foto primero.");
+  const anterior=document.getElementById("carritoModal");
+  if(anterior) anterior.remove();
 
-return;
+  const total=
+  seleccionadas.length*
+  partidoActual.precio;
+
+  const modal=document.createElement("div");
+  modal.id="carritoModal";
+
+  modal.style.cssText=`
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.92);
+    z-index:9999;
+    overflow:auto;
+    padding:30px 20px;
+  `;
+
+  const caja=document.createElement("div");
+
+  caja.style.cssText=`
+    max-width:850px;
+    margin:auto;
+    background:#111516;
+    border:1px solid #333;
+    border-radius:16px;
+    padding:25px;
+    color:white;
+  `;
+
+  caja.innerHTML=`
+    <button class="menu"
+      onclick="document.getElementById('carritoModal').remove()">
+      ← VOLVER
+    </button>
+
+    <h2 style="margin-top:25px">
+      Tu carrito
+    </h2>
+
+    <p>
+      ${partidoActual.nombre}
+    </p>
+
+    <div id="fotosCarrito"
+      style="
+        display:grid;
+        grid-template-columns:repeat(3,1fr);
+        gap:10px;
+        margin:20px 0;
+      ">
+    </div>
+
+    <h2>
+      ${seleccionadas.length} fotos · $${total}
+    </h2>
+
+    <button class="green full"
+      onclick="continuarPago()">
+      CONTINUAR AL PAGO
+    </button>
+  `;
+
+  modal.appendChild(caja);
+  document.body.appendChild(modal);
+
+  const fotosGaleria=
+  document.querySelectorAll("#fotos .photo");
+
+  const contenedor=
+  document.getElementById("fotosCarrito");
+
+  seleccionadas.forEach(i=>{
+
+    const miniatura=document.createElement("div");
+
+    miniatura.className="photo";
+
+    miniatura.style.backgroundImage=
+    fotosGaleria[i].style.backgroundImage;
+
+    contenedor.appendChild(miniatura);
+
+  });
 
 }
 
-const total=
-seleccionadas.length*
-partidoActual.precio;
 
-alert(
-"Carrito de Planeta Deporte\n\n"+
-partidoActual.nombre+
-"\n"+
-seleccionadas.length+
-" fotos\n\n"+
-"Total: $"+
-total+
-"\n\n"+
-"Acá conectaremos Mercado Pago."
-);
+function continuarPago(){
 
-}
+  alert(
+    "Siguiente paso: conectar Mercado Pago."
+  );
+
+
+
+
+
+
 
 
 function volver(){
