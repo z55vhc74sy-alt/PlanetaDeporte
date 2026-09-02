@@ -15,7 +15,7 @@ export default async function handler(request) {
 
   } catch (error) {
     console.error(error);
-
+console.log("ERROR PHOTOS:", error);
     return Response.json(
       { error: error.message },
       { status: 500 }
