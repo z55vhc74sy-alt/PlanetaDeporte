@@ -1475,9 +1475,30 @@ borrar.style.cssText = `
 borrar.onclick = async function(){
   if(!confirm("¿Borrar esta foto?")) return;
 
-  alert("Ahora vamos a conectar este botón para borrar la foto del servidor.");
-};
+  try{
+    const respuesta = await fetch("/api/delete-photo",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        url:foto.url
+      })
+    });
 
+    const resultado = await respuesta.json();
+
+    if(!respuesta.ok){
+      throw new Error(resultado.error || "No se pudo borrar la foto");
+    }
+
+    caja.remove();
+
+  }catch(error){
+    console.error(error);
+    alert("❌ No se pudo borrar la foto.");
+  }
+};
 caja.appendChild(borrar);      caja.appendChild(img);
       contenedor.appendChild(caja);
 
