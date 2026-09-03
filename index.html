@@ -1376,7 +1376,13 @@ ELIMINAR
 `;
 
 });
-
+setTimeout(()=>{
+  partidos.forEach(p=>{
+    if(window.cargarFotosAdmin){
+      window.cargarFotosAdmin(p.id);
+    }
+  });
+},100);
 }
 
 window.previsualizarFotos = function(id){
