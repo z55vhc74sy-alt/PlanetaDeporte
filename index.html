@@ -1423,7 +1423,7 @@ status.innerText=
 try{
 
 let cantidad=0;
-
+const total=input.files.length;
 for(const file of input.files){
 
 const pathname=
@@ -1447,7 +1447,16 @@ multipart:true
 );
 
 cantidad++;
+  const porcentaje=Math.round((cantidad/total)*100);
 
+status.innerText=
+"Subiendo "+cantidad+" de "+total+
+" fotos — "+porcentaje+"%";
+status.innerHTML += `
+<div style="width:100%;height:12px;background:#333;border-radius:10px;margin-top:8px;overflow:hidden;">
+  <div style="width:${porcentaje}%;height:100%;background:#7cff00;transition:width .3s;"></div>
+</div>
+`;
 }
 
 status.innerText=
