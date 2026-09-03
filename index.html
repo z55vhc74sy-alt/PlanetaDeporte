@@ -1419,7 +1419,9 @@ return;
 
 status.innerText=
 "Preparando subida...";
-
+partido.publicado=false;
+guardar();
+mostrarPartidos();
 try{
 
 let cantidad=0;
@@ -1431,11 +1433,17 @@ partido.folder+
 "/"+
 file.name;
 
-status.innerText=
-"Subiendo "+
-(file.name)+
-"...";
+const porcentajeAntes=Math.round((cantidad/total)*100);
 
+status.innerHTML=
+"Subiendo "+(cantidad+1)+" de "+total+
+" fotos — "+porcentajeAntes+"%"+
+`
+<div style="width:100%;height:12px;background:#333;border-radius:10px;margin-top:8px;overflow:hidden;">
+  <div style="width:${porcentajeAntes}%;height:100%;background:#7cff00;transition:width .3s;"></div>
+</div>
+`;
+  
 await upload(
 pathname,
 file,
@@ -1459,10 +1467,13 @@ status.innerHTML += `
 `;
 }
 
-status.innerText=
-"✅ "+cantidad+
-" fotos subidas correctamente.";
+partido.publicado=false;
+guardar();
+mostrarPartidos();
 
+status.innerHTML=
+"✅ "+cantidad+" fotos cargadas correctamente.<br><br>"+
+'<button class="green" onclick="togglePartido('+id+')">PUBLICAR FOTOS</button>';
 input.value="";
 
 }catch(error){
