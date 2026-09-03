@@ -1334,6 +1334,15 @@ SUBIR FOTOS
   ">
 </div>
 <div
+  id="guardadas-${p.id}"
+  style="
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(90px,1fr));
+    gap:8px;
+    margin-top:12px;
+  ">
+</div>
+<div
 class="status"
 id="status-${p.id}">
 </div>
@@ -1397,8 +1406,84 @@ window.previsualizarFotos = function(id){
   });
 
 };
-  
-  window.subirFotos=async function(id){
+  window.cargarFotosAdmin = async function(id){
+
+  const partido = partidos.find(p=>p.id===id);
+  const contenedor = document.getElementById("guardadas-" + id);
+
+  if(!partido || !contenedor) return;
+
+  contenedor.innerHTML = "";
+
+  try{
+
+    const respuesta = await fetch(
+      "/api/photos?prefix=" + encodeURIComponent(partido.folder)
+    );
+
+    const datos = await respuesta.json();
+
+    if(!datos.blobs || !datos.blobs.length){
+      contenedor.innerHTML =
+        '<div style="color:#888">Todavía no hay fotos cargadas.</div>';
+      return;
+    }
+
+    datos.blobs.forEach((foto)=>{
+
+      const caja = document.createElement("div");
+
+      caja.style.cssText = `
+        position:relative;
+      `;
+
+      const img = document.createElement("img");
+
+      img.src = foto.url;
+
+      img.style.cssText = `
+        width:100%;
+        height:90px;
+        object-fit:cover;
+        border-radius:8px;
+      `;
+const borrar = document.createElement("button");
+borrar.innerText = "✕";
+
+borrar.style.cssText = `
+  position:absolute;
+  top:4px;
+  right:4px;
+  width:28px;
+  height:28px;
+  border:none;
+  border-radius:50%;
+  background:#e60000;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  z-index:5;
+`;
+
+borrar.onclick = async function(){
+  if(!confirm("¿Borrar esta foto?")) return;
+
+  alert("Ahora vamos a conectar este botón para borrar la foto del servidor.");
+};
+
+caja.appendChild(borrar);      caja.appendChild(img);
+      contenedor.appendChild(caja);
+
+    });
+
+  }catch(error){
+
+    console.error(error);
+
+  }
+
+};  window.subirFotos=async function(id){
 
 const partido=
 partidos.find(p=>p.id===id);
